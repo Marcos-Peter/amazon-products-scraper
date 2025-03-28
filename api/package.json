@@ -13,9 +13,11 @@
     "@types/bun": "latest",
     "@types/express": "5.0.1",
     "@types/jsdom": "21.1.7",
+    "@types/supertest": "6.0.3",
     "eslint": "9.23.0",
     "eslint-plugin-prettier": "5.2.5",
     "eslint-plugin-security": "3.0.1",
+    "supertest": "7.1.0",
     "typescript-eslint": "8.28.0"
   },
   "peerDependencies": {

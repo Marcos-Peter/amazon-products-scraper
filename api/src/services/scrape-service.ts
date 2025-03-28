@@ -1,10 +1,10 @@
-import type { ProductListItem } from '@/types/products';
+import type { ProductListItem, ProductsList } from '@/types/products';
 import { fetchHTML } from '@/utils/fetch-HTML';
 import { JSDOM } from 'jsdom';
 
 const baseUrl = process.env.BASE_URL || 'https://www.amazon.com/s?k=';
 
-export const scrapeAmazonProducts = async (keyword: string): Promise<ProductListItem[]> => {
+export const scrapeAmazonProducts = async (keyword: string): Promise<ProductsList> => {
     const url = `${baseUrl}${encodeURIComponent(keyword)}`;
     const html = await fetchHTML(url);
     const dom = new JSDOM(html);
@@ -23,5 +23,5 @@ export const scrapeAmazonProducts = async (keyword: string): Promise<ProductList
         products.push({ title, rating, reviews, image });
     });
 
-    return products;
+    return { items: products, totalItems: products.length };
 };
