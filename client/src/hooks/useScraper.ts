@@ -11,7 +11,15 @@ type UseScraperReturn = {
 
 export const useScraper = (): UseScraperReturn => {
     const [data, setData] = useState<ProductsList>({
-        items: [],
+        items: [
+            {
+                title: '',
+                rating: '',
+                reviews: '',
+                image: '',
+                link: '',
+            },
+        ],
         totalItems: 0,
     });
     const [loading, setLoading] = useState<boolean>(false);
@@ -23,9 +31,10 @@ export const useScraper = (): UseScraperReturn => {
 
         try {
             const result = await fetchProducts(keyword);
+
             setData(result);
         } catch (err) {
-            setError(`Failed to load products: ${err}`);
+            setError(`Failed to load products - ${err}`);
         } finally {
             setLoading(false);
         }

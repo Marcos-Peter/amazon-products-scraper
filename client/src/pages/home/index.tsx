@@ -8,7 +8,7 @@ import { Search } from 'lucide-react';
 
 const Home: React.FC = () => {
     const [keyword, setKeyword] = useState<string>('');
-    const { data, loading, searchProducts } = useScraper();
+    const { data, loading, searchProducts, error } = useScraper();
 
     const handleSearch = (): void => {
         if (keyword.trim()) searchProducts(keyword);
@@ -35,17 +35,27 @@ const Home: React.FC = () => {
                     </div>
                 </article>
                 <article className='w-full h-full grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 justify-start align-top p-8'>
-                    {data.totalItems > 0 ? (
-                        data.items.map((item, index) => {
-                            return (
-                                <Card key={index} imageUrl={item.image} title={item.title} rating={item.rating} reviews={item.reviews} />
-                            );
-                        })
-                    ) : (
-                        <div className='col-span-2'>
-                            <p className='text-gray-300'>Unable to fin any products. Use another keyword or try again later.</p>
-                        </div>
-                    )}
+                    {data.totalItems > 0
+                        ? data.items.map((item, index) => {
+                              return (
+                                  <Card
+                                      key={index}
+                                      imageUrl={item.image}
+                                      title={item.title}
+                                      rating={item.rating}
+                                      reviews={item.reviews}
+                                      link={item.link}
+                                  />
+                              );
+                          })
+                        : data.items[0].title !== '' ||
+                          (error && (
+                              <div className='col-span-2'>
+                                  <p className='text-gray-300'>
+                                      {error ?? 'Unable to find any products. Use another keyword or try again later.'}
+                                  </p>
+                              </div>
+                          ))}
                 </article>
             </section>
         </main>

@@ -17,10 +17,14 @@ export const scrapeAmazonProducts = async (keyword: string): Promise<ProductsLis
         const rating = item.querySelector('i.a-icon-star-small span.a-icon-alt')?.textContent?.split(' ')[0] || '0';
         const reviews = item.querySelector('.s-csa-instrumentation-wrapper a[aria-label*="ratings"]')?.textContent?.replace(',', '') || '0';
         const image = item.querySelector('.s-image')?.getAttribute('src') || 'N/A';
+        let link = item.querySelector('a.a-link-normal.s-no-outline')?.getAttribute('href') || '#';
 
         if (title === 'N/A') return;
+        if (link !== '#') {
+            link = `https://www.amazon.com/${link}`;
+        }
 
-        products.push({ title, rating, reviews, image });
+        products.push({ title, rating, reviews, image, link });
     });
 
     return { items: products, totalItems: products.length };

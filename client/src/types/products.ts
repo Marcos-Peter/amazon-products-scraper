@@ -8,4 +8,5 @@ export type ProductListItem = {
     rating: string;
     reviews: string;
     image: string;
+    link: string;
 };
