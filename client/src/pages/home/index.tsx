@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button } from '@/components/button/button.component';
 import { Card } from '@/components/card/card.component';
 import { Input } from '@/components/custom-input';
+import { useScraper } from '@/hooks/useScraper';
 import { Search } from 'lucide-react';
 
-const MOCKED_PRODUCT = {
-    title: 'Knife Set, 7 Piece Sharp Chef Knife Set with Solid Wood Block, Unique One-Sided Magnetic Design, Full-tang Stainless Steel Knife Block Set for Home and Restaurants, Classic Elegant Black',
-    rating: '4.6',
-    reviews: '8 ',
-    image: 'https://m.media-amazon.com/images/I/61TEwpB+T0L._AC_UL320_.jpg',
-};
-
 const Home: React.FC = () => {
+    const [keyword, setKeyword] = useState<string>('');
+    const { data, loading, searchProducts } = useScraper();
+
+    const handleSearch = (): void => {
+        if (keyword.trim()) searchProducts(keyword);
+    };
+
     return (
         <main className='min-h-scree min-w-screen font-mono'>
             <section className='min-h-screen flex mx-auto flex-col max-w-2/3 pt-40 items-center'>
@@ -26,18 +27,25 @@ const Home: React.FC = () => {
                             <Input.Icon>
                                 <Search />
                             </Input.Icon>
-                            <Input.Field className='w-lg' />
+                            <Input.Field className='w-lg' onChange={(e) => setKeyword(e.target.value)} />
                         </Input.Root>
-                        <Button className='max-w-fit text-xl'>Search</Button>
+                        <Button onClick={handleSearch} loading={loading} className='max-w-fit text-xl'>
+                            Search
+                        </Button>
                     </div>
                 </article>
                 <article className='w-full h-full grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 justify-start align-top p-8'>
-                    <Card
-                        imageUrl={MOCKED_PRODUCT.image}
-                        title={MOCKED_PRODUCT.title}
-                        rating={MOCKED_PRODUCT.rating}
-                        reviews={MOCKED_PRODUCT.reviews}
-                    />
+                    {data.totalItems > 0 ? (
+                        data.items.map((item, index) => {
+                            return (
+                                <Card key={index} imageUrl={item.image} title={item.title} rating={item.rating} reviews={item.reviews} />
+                            );
+                        })
+                    ) : (
+                        <div className='col-span-2'>
+                            <p className='text-gray-300'>Unable to fin any products. Use another keyword or try again later.</p>
+                        </div>
+                    )}
                 </article>
             </section>
         </main>
