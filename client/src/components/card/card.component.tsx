@@ -1,3 +1,4 @@
+import { RatingStars } from '@/components/rating-starts/rating-start.component';
 import React, { useEffect, useState } from 'react';
 
 type CardProps = {
@@ -14,12 +15,12 @@ export const Card: React.FC<CardProps> = ({ title, imageUrl, rating, reviews }) 
 
     useEffect(() => {
         if (title.length > MAX_TITLE_LENGTH) {
-            setDisplayTitle(title.slice(0, MAX_TITLE_LENGTH) + '...');
+            setDisplayTitle(`${title.slice(0, MAX_TITLE_LENGTH)}...`);
         }
     }, [title]);
 
     return (
-        <div className='flex flex-row rounded-md bg-gray-100 h-56 w-full overflow-hidden cursor-pointer transition-all hover:shadow-md dark:hover:shadow-blue-50'>
+        <div className='flex flex-row rounded-md bg-gray-100 h-56 w-full overflow-hidden cursor-pointer transition-all transition-discrete hover:shadow-md dark:hover:shadow-blue-50 p-1 '>
             <div className='w-2/5 col-span-1'>
                 <img className='rounded-l-md h-full w-full object-cover' src={imageUrl} alt={title} />
             </div>
@@ -30,9 +31,10 @@ export const Card: React.FC<CardProps> = ({ title, imageUrl, rating, reviews }) 
                         {displayTitle}
                     </h2>
                 </div>
-                <div className='flex items-center mb-2'>
-                    <span className='text-yellow-500 font-bold'>{rating}</span>
-                    <span className='text-gray-600 ml-1'>({reviews} reviews)</span>
+                <div className='flex items-center gap-2'>
+                    <RatingStars rating={parseFloat(rating)} />
+                    <span className='text-yellow-600 font-bold'>{rating}</span>
+                    <span className='text-gray-600 ml-1 font-semibold'>({reviews} reviews)</span>
                 </div>
             </div>
         </div>
